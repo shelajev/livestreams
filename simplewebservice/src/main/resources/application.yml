@@ -1,3 +1,4 @@
 micronaut:
   application:
     name: simplewebservice
+    greeting: Aloha,
