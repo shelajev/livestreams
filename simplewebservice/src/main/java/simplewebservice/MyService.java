@@ -1,2 +1,7 @@
-package simplewebservice;public class MyService {
+package simplewebservice;
+
+import javax.inject.Singleton;
+
+@Singleton
+public class MyService {
 }
