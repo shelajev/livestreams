@@ -1,5 +1,8 @@
 package simplewebservice;
 
+import io.micronaut.core.annotation.Introspected;
+
+@Introspected
 public class Person {
   public String getName() {
     return name;
