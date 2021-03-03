@@ -8,7 +8,7 @@ import io.micronaut.http.annotation.Get;
 public class MainController {
 
 
-  @Value("${application.greeting}")
+  @Value("${micronaut.application.greeting}")
   private String greeting;
 
   @Get("/hello/{name}")
