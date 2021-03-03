@@ -27,4 +27,9 @@ public class MainController {
   public String hello(String name) {
     return greeting + " " + name + "!";
   }
+
+  @Get("/oleg/")
+  public Object oleg() {
+    return myservice.getOleg();;
+  }
 }
