@@ -30,6 +30,6 @@ public class MainController {
 
   @Get("/oleg/")
   public Object oleg() {
-    return myservice.getOleg();;
+    return myservice.getOleg();
   }
 }
