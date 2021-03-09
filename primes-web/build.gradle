@@ -27,7 +27,8 @@ dependencies {
 }
 
 nativeImage { 
-    // 
+    // args("--gc=G1")
+    args("-H:+StaticExecutableWithDynamicLibC")
 }
 
 
