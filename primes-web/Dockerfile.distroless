@@ -1,0 +1,3 @@
+FROM gcr.io/distroless/base
+COPY build/native-image/application app
+ENTRYPOINT ["/app", "-Xmx128M", "-Xmn48M"]
