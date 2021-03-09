@@ -33,7 +33,6 @@ nativeImage {
     args("--libc=musl")
 }
 
-
 application {
     mainClass.set("primes.web.Application")
 }
