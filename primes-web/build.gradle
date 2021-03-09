@@ -26,6 +26,10 @@ dependencies {
     runtimeOnly("ch.qos.logback:logback-classic")
 }
 
+nativeImage { 
+    // 
+}
+
 
 application {
     mainClass.set("primes.web.Application")
