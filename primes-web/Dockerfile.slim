@@ -1,3 +1,0 @@
-FROM oraclelinux:8-slim
-COPY build/native-image/application app
-ENTRYPOINT ["/app", "-Xmx128M", "-Xmn48M"]
