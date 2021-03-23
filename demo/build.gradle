@@ -4,7 +4,7 @@ plugins {
 }
 
 version = "0.1"
-group = "demo"
+group = "org.shelajev"
 
 repositories {
     mavenCentral()
@@ -15,7 +15,7 @@ micronaut {
     testRuntime("junit5")
     processing {
         incremental(true)
-        annotations("demo.*")
+        annotations("org.shelajev.*")
     }
 }
 
@@ -28,7 +28,7 @@ dependencies {
 
 
 application {
-    mainClass.set("demo.Application")
+    mainClass.set("org.shelajev.Application")
 }
 java {
     sourceCompatibility = JavaVersion.toVersion("1.8")

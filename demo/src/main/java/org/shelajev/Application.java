@@ -1,4 +1,4 @@
-package demo;
+package org.shelajev;
 
 import io.micronaut.runtime.Micronaut;
 

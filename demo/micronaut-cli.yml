@@ -1,5 +1,5 @@
 applicationType: default
-defaultPackage: demo
+defaultPackage: org.shelajev
 testFramework: junit
 sourceLanguage: java
 buildTool: gradle
