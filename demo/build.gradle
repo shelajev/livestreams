@@ -27,6 +27,8 @@ dependencies {
     annotationProcessor("io.dekorate:kubernetes-annotations:2.1.1")
     implementation("io.dekorate:kubernetes-annotations:2.1.1")
     implementation("io.micronaut:micronaut-management")
+    implementation("io.micronaut.kubernetes:micronaut-kubernetes-discovery-client")
+
 
     implementation("io.micronaut:micronaut-http-client")
     implementation("io.micronaut:micronaut-runtime")
