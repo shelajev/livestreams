@@ -2,9 +2,11 @@ package org.shelajev;
 
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.http.annotation.*;
+import io.micronaut.runtime.context.scope.Refreshable;
 
 import javax.inject.Inject;
 
+@Refreshable
 @Controller("/example")
 public class ExampleController {
 
