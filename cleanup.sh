@@ -10,7 +10,8 @@ git checkout main
 #cleanup the main bran
 shopt -s extglob
 rm -rf -v !("LICENSE"|"README.md"|"cleanup.sh")
+shopt -u extglob
 git add .
 git commit -am "cleanup"
-shopt -u extglob
+git push
 
