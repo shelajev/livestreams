@@ -75,7 +75,7 @@ public class GreetService implements Service {
 
       var parseBeers = ctx.eval("js", JS_CODE);
 
-      response.send(parseBeers.execute(result).asString());
+      response.send(parseBeers.execute(result, what).asString());
     } catch (Exception ignoreMe) {
     }
   }
