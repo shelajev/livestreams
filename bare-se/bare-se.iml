@@ -52,10 +52,10 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.apiguardian:apiguardian-api:1.1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.opentest4j:opentest4j:1.2.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.platform:junit-platform-commons:1.7.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: io.helidon.webclient:helidon-webclient:2.2.2" level="project" />
+    <orderEntry type="library" name="Maven: io.helidon.webclient:helidon-webclient:2.2.2" level="project" />
     <orderEntry type="library" name="Maven: io.helidon.common:helidon-common-context:2.2.2" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-buffer:4.1.59.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: io.netty:netty-handler-proxy:4.1.59.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: io.netty:netty-codec-socks:4.1.59.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-handler-proxy:4.1.59.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-codec-socks:4.1.59.Final" level="project" />
   </component>
 </module>

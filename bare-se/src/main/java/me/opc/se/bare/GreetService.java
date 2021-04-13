@@ -9,6 +9,7 @@ import javax.json.JsonBuilderFactory;
 import javax.json.JsonObject;
 
 import io.helidon.config.Config;
+import io.helidon.webclient.WebClient;
 import io.helidon.webserver.Routing;
 import io.helidon.webserver.ServerRequest;
 import io.helidon.webserver.ServerResponse;
@@ -51,13 +52,14 @@ public class GreetService implements Service {
           .allowAllAccess(true)
           .build();
 
-        WebCL
+        var client = WebClient.builder().baseUri("https://api.punkapi.com/v2/beers").build();
+        String result = client.get().request(String.class).toCompletableFuture().get();
 
-        ctx.eval("js", "function add(a, b) { return a + b; }");
+        ctx.eval("js", "function id(a) { return a; }");
 
-        var eval = ctx.getBindings("js").getMember("add");
+        var eval = ctx.getBindings("js").getMember("id");
 
-        String msg = String.format("%s %s!", greeting, eval.execute(what, what));
+        String msg = String.format("%s %s!", greeting, eval.execute(result));
         LOGGER.info("Greeting message is " + msg);
         JsonObject returnObject = JSON.createObjectBuilder()
                 .add("message", msg)
