@@ -22,10 +22,22 @@ import org.graalvm.polyglot.proxy.Proxy;
 
 
 public class GreetService implements Service {
-  private static final Logger LOGGER = Logger.getLogger(GreetService.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(GreetService.class.getName());
   private static final JsonBuilderFactory JSON = Json.createBuilderFactory(Collections.emptyMap());
 
-  private final String greeting;
+
+  public static final String JS_CODE = "(function parseBeers(data, name) {" +
+    "    var beers = JSON.parse(data);" +
+    "    var results = [];" +
+    "    for (var b of beers) {" +
+    "        if (b.name.indexOf(name) != -1) {" +
+    "            results.push({name: b.name, desc: b.description});" +
+    "        }" +
+    "    }" +
+    "    return JSON.stringify(results);" +
+    "})";
+
+    private final String greeting;
 
   GreetService(Config config) {
     greeting = config.get("app.greeting").asString().orElse("Ciao");
@@ -59,7 +71,7 @@ public class GreetService implements Service {
       var client = WebClient.builder().baseUri("https://api.punkapi.com/v2/beers").build();
       String result = client.get().request(String.class).toCompletableFuture().get();
 
-      ctx.eval("js", "function id(a) { return a; }");
+      ctx.eval("js", JS_CODE);
 
       var eval = ctx.getBindings("js").getMember("id");
 
