@@ -2,6 +2,7 @@
 package me.opc.se.bare;
 
 import java.util.Collections;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 
 import javax.json.Json;
@@ -44,7 +45,7 @@ public class GreetService implements Service {
      * @param request the server request
      * @param response the server response
      */
-    private void getDefaultMessageHandler(ServerRequest request, ServerResponse response) {
+    private void getDefaultMessageHandler(ServerRequest request, ServerResponse response) throws ExecutionException, InterruptedException {
         var what = request.path().param("what");
 
 
