@@ -13,6 +13,8 @@ import io.helidon.webserver.Routing;
 import io.helidon.webserver.ServerRequest;
 import io.helidon.webserver.ServerResponse;
 import io.helidon.webserver.Service;
+import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.Value;
 
 public class GreetService implements Service {
     private static final Logger LOGGER = Logger.getLogger(GreetService.class.getName());
@@ -40,7 +42,12 @@ public class GreetService implements Service {
      */
     private void getDefaultMessageHandler(ServerRequest request, ServerResponse response) {
         var what = request.path().param("what");
-        String msg = String.format("%s %s!", greeting, what == null ? "World" : what);
+
+
+        Context ctx = Context.create("js");
+        var eval = ctx.eval("js", "(function add(a, b) { return a + b; } )");
+
+        String msg = String.format("%s %s!", greeting, eval.execute(what, what));
         LOGGER.info("Greeting message is " + msg);
         JsonObject returnObject = JSON.createObjectBuilder()
                 .add("message", msg)
