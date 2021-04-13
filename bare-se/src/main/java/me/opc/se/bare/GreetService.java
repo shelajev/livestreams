@@ -59,10 +59,10 @@ public class GreetService implements Service {
       var source = Source.newBuilder("js",
       "import {parseBeers as parse} from '/home/opc/streaming-setup/livestreams/bare-se/src/main/resources/parse_beers.mjs'; parse;", "loading.mjs").build();
 
+      var parseBeers = ctx.eval(source);
+
       var client = WebClient.builder().baseUri("https://api.punkapi.com/v2/beers").build();
       String result = client.get().request(String.class).toCompletableFuture().get();
-
-      var parseBeers = ctx.eval("js", JS_CODE);
 
       response.send(parseBeers.execute(result, what).asString());
     } catch (Exception ignoreMe) {
