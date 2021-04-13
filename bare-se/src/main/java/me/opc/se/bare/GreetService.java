@@ -53,11 +53,11 @@ public class GreetService implements Service {
       var what = request.path().param("what");
 
       Context ctx = Context.newBuilder("js")
-        .allowAllAccess(true)
+        .allowAllAccess(true).fileSystem(new MyFileSystem())
         .build();
 
       var source = Source.newBuilder("js",
-      "import {parseBeers as parse} from '/home/opc/streaming-setup/livestreams/bare-se/src/main/resources/parse_beers.mjs'; parse;", "loading.mjs").build();
+      "import {parseBeers as parse} from 'parseBeers'; parse;", "loading.mjs").build();
 
       var parseBeers = ctx.eval(source);
 
