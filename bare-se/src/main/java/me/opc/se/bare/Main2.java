@@ -9,7 +9,7 @@ public class Main2 {
   public static void main(String[] args) {
     Context ctx = Context.newBuilder("js").allowAllAccess(true).build();
 
-    var x = ctx.eval("js", "(async function foo (pro) { return await pro; })");
+    var x = ctx.eval("js", "(async function foo (pro) { return await pro(); })");
 
     Value promise = x.execute((Thenable)(resolve, reject) -> {
       resolve.execute("Java 42");
