@@ -73,12 +73,7 @@ public class GreetService implements Service {
 
       var parseBeers = ctx.eval("js", JS_CODE);
 
-      String msg = parseBeers.execute(result).toString();
-      LOGGER.info("Greeting message is " + msg);
-      JsonObject returnObject = JSON.createObjectBuilder()
-        .add("message", msg)
-        .build();
-      response.send(returnObject);
+      response.send(parseBeers.execute(result).asString());
     } catch (Exception ignoreMe) {
     }
   }
