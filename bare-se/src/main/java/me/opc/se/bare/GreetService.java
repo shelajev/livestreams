@@ -3,6 +3,7 @@ package me.opc.se.bare;
 
 import java.util.Collections;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 import javax.json.Json;
@@ -80,7 +81,10 @@ public class GreetService implements Service {
         }
       };
 
-      response.send(parseBeers.get().execute(fetchBeerData, what).asString());
+      Value execute = parseBeers.get().execute(fetchBeerData, what);
+      execute.invokeMember("then", (Consumer<Object>)(v) -> {
+        response.send(v);
+      });
 
     } catch (Exception ignoreMe) {
       throw new RuntimeException(ignoreMe);
