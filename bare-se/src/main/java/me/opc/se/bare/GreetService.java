@@ -31,11 +31,12 @@ public class GreetService implements Service {
         .build();
 
       Source source = Source.newBuilder("js",
-        "import {parseBeers as parse} from 'parseBeers'; parse;", "loading.mjs").build();
+        "import {parseBeersAsync as parse} from 'parseBeers'; parse;", "loading.mjs").build();
 
       return ctx.eval(source);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
     }
-    catch (Exception e) {throw new RuntimeException(e);}
   });
 
 
@@ -68,10 +69,18 @@ public class GreetService implements Service {
     try {
       var what = request.path().param("what");
 
-      var client = WebClient.builder().baseUri("https://api.punkapi.com/v2/beers").build();
-      String result = client.get().request(String.class).toCompletableFuture().get();
 
-      response.send(parseBeers.get().execute(result, what).asString());
+      Thenable fetchBeerData = (onResolve, onReject) -> {
+        try {
+          var client = WebClient.builder().baseUri("https://api.punkapi.com/v2/beers").build();
+          String result = client.get().request(String.class).toCompletableFuture().get();
+          onResolve.executeVoid(result);
+        } catch (Exception e) {
+          onReject.executeVoid(e);
+        }
+      };
+
+      response.send(parseBeers.get().execute(fetchBeerData, what).asString());
 
     } catch (Exception ignoreMe) {
       throw new RuntimeException(ignoreMe);
