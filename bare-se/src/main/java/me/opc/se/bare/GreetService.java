@@ -66,6 +66,8 @@ public class GreetService implements Service {
 
       Context ctx = Context.newBuilder("js")
         .allowAllAccess(true)
+        .option("inspect", "4242")
+        .option("inspect.Path", java.util.UUID.randomUUID().toString())
         .build();
 
       var client = WebClient.builder().baseUri("https://api.punkapi.com/v2/beers").build();
