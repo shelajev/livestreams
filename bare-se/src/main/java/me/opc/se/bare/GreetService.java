@@ -23,15 +23,21 @@ import org.graalvm.polyglot.proxy.Proxy;
 
 
 public class GreetService implements Service {
+  private static Value parseBeers;
 
-  private static Context ctx = Context.newBuilder("js")
-    .allowAllAccess(true).fileSystem(new MyFileSystem())
-    .build();
+  static {
+    try {
+      Context ctx = Context.newBuilder("js")
+        .allowAllAccess(true).fileSystem(new MyFileSystem())
+        .build();
 
-  private static Source source = Source.newBuilder("js",
-    "import {parseBeers as parse} from 'parseBeers'; parse;", "loading.mjs").build();
+      Source source = Source.newBuilder("js",
+        "import {parseBeers as parse} from 'parseBeers'; parse;", "loading.mjs").build();
 
-  private static Value parseBeers = ctx.eval(source);
+      parseBeers = ctx.eval(source);
+    }
+    catch (Exception e) {throw new RuntimeException(e);} 
+  }
 
 
   private static final Logger LOGGER = Logger.getLogger(GreetService.class.getName());
