@@ -11,8 +11,8 @@ public class Main2 {
 
     var x = ctx.eval("js", "(async function foo () { return 42; })");
 
-
-    Value then = x.invokeMember("then",
+    Value promise = x.execute();
+    Value then = promise.invokeMember("then",
       (Consumer<Object>) (inside -> System.out.println("Java +" + inside)));
 
   }
