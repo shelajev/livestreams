@@ -9,9 +9,8 @@ public class Main2 {
   public static void main(String[] args) {
     Context ctx = Context.create("js");
 
-    var x = ctx.eval("js", "new Promise((resolve, reject) => {" +
-      "resolve(42);" +
-      "})");
+    var x = ctx.eval("js", "(async function foo () { return 42; })");
+
 
     Value then = x.invokeMember("then",
       (Consumer<Object>) (inside -> System.out.println("Java +" + inside)));
