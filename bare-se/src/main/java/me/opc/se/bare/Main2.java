@@ -16,7 +16,7 @@ public class Main2 {
     });
 
     Value then = promise.invokeMember("then",
-      (Consumer<Object>) (inside -> System.out.println("Java +" + inside)));
+      (Consumer<Object>) (inside -> System.out.println("Consuming: " + inside)));
 
   }
 }
