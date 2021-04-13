@@ -45,7 +45,10 @@ public class GreetService implements Service {
 
 
         Context ctx = Context.create("js");
-        var eval = ctx.eval("js", "(function add(a, b) { return a + b; } )");
+        ctx.eval("js", "function add(a, b) { return a + b; }");
+
+
+        var eval = ctx.getBindings("js").getMember("add");
 
         String msg = String.format("%s %s!", greeting, eval.execute(what, what));
         LOGGER.info("Greeting message is " + msg);
