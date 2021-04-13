@@ -23,9 +23,8 @@ import org.graalvm.polyglot.proxy.Proxy;
 
 
 public class GreetService implements Service {
-  private static Value parseBeers;
 
-  static {
+  private ThreadLocal<Value> parseBeers = ThreadLocal.withInitial(() -> {
     try {
       Context ctx = Context.newBuilder("js")
         .allowAllAccess(true).fileSystem(new MyFileSystem())
@@ -34,10 +33,10 @@ public class GreetService implements Service {
       Source source = Source.newBuilder("js",
         "import {parseBeers as parse} from 'parseBeers'; parse;", "loading.mjs").build();
 
-      parseBeers = ctx.eval(source);
+      return ctx.eval(source);
     }
     catch (Exception e) {throw new RuntimeException(e);}
-  }
+  });
 
 
   private static final Logger LOGGER = Logger.getLogger(GreetService.class.getName());
@@ -73,6 +72,7 @@ public class GreetService implements Service {
       String result = client.get().request(String.class).toCompletableFuture().get();
 
       response.send(parseBeers.execute(result, what).asString());
+
     } catch (Exception ignoreMe) {
       throw new RuntimeException(ignoreMe);
     }
