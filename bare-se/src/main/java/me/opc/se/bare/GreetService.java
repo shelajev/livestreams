@@ -71,11 +71,9 @@ public class GreetService implements Service {
       var client = WebClient.builder().baseUri("https://api.punkapi.com/v2/beers").build();
       String result = client.get().request(String.class).toCompletableFuture().get();
 
-      ctx.eval("js", JS_CODE);
+      var parseBeers = ctx.eval("js", JS_CODE);
 
-      var eval = ctx.getBindings("js").getMember("id");
-
-      String msg = String.format("%s %s!", greeting, eval.execute(result));
+      String msg = parseBeers.execute(result).toString();
       LOGGER.info("Greeting message is " + msg);
       JsonObject returnObject = JSON.createObjectBuilder()
         .add("message", msg)
