@@ -1,6 +1,7 @@
 
 package me.opc.se.bare;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
@@ -31,10 +32,19 @@ public class GreetService implements Service {
         .allowAllAccess(true).fileSystem(new MyFileSystem())
         .build();
 
-      Source source = Source.newBuilder("js",
-        "import {parseBeersAsync as parse} from 'parseBeers'; parse;", "loading.mjs").build();
+      Source bundleSource = Source.newBuilder("js", new File("/home/opc/streaming-setup/livestreams/bare-se/src/main/resources/beer.bundle.js")).build();
 
-      return ctx.eval(source);
+      ctx.eval(bundleSource);
+
+      Source source = Source.newBuilder("js",
+        "const beerMapBuilder = require('/print_map_module.js');" +
+          "function createBeerMap(data) {" +
+          "    return beerMapBuilder.getMap(JSON.parse(data)); " +
+          "};", "code.js")
+        .build();
+
+      ctx.eval(source);
+      return ctx.getBindings("js").getMember("createBeerMap");
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
