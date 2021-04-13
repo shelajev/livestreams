@@ -9,11 +9,19 @@ public class Main2 {
   public static void main(String[] args) {
     Context ctx = Context.newBuilder("js").allowAllAccess(true).build();
 
-    var x = ctx.eval("js", "(async function foo () { return 42; })");
+    var x = ctx.eval("js", "(async function foo (pro) { return await pro; })");
 
-    Value promise = x.execute();
+    Value promise = x.execute((Thenable)(resolve, reject) -> {
+      resolve.execute("Java 42");
+    });
+
     Value then = promise.invokeMember("then",
       (Consumer<Object>) (inside -> System.out.println("Java +" + inside)));
 
   }
+}
+
+@FunctionalInterface
+interface Thenable {
+  void then(Value resolve, Value reject);
 }
