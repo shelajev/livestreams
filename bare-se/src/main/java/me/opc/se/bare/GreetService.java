@@ -17,6 +17,7 @@ import io.helidon.webserver.ServerResponse;
 import io.helidon.webserver.Service;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.HostAccess;
+import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
 import org.graalvm.polyglot.proxy.Proxy;
 
@@ -24,9 +25,6 @@ import org.graalvm.polyglot.proxy.Proxy;
 public class GreetService implements Service {
     private static final Logger LOGGER = Logger.getLogger(GreetService.class.getName());
   private static final JsonBuilderFactory JSON = Json.createBuilderFactory(Collections.emptyMap());
-
-
-  public static final String JS_CODE = "";
 
     private final String greeting;
 
@@ -57,6 +55,9 @@ public class GreetService implements Service {
       Context ctx = Context.newBuilder("js")
         .allowAllAccess(true)
         .build();
+
+      var source = Source.newBuilder("js",
+      "import {parseBeers as parse} from '/home/opc/streaming-setup/livestreams/bare-se/src/main/resources/parse_beers.mjs'; parse;", "loading.mjs").build();
 
       var client = WebClient.builder().baseUri("https://api.punkapi.com/v2/beers").build();
       String result = client.get().request(String.class).toCompletableFuture().get();
