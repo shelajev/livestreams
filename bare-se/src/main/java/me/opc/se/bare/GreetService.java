@@ -29,7 +29,7 @@ public class GreetService implements Service {
       Context ctx = Context.newBuilder("js")
         .allowAllAccess(true).fileSystem(new MyFileSystem())
         .build();
-      
+
       Source source = Source.newBuilder("js",
         "import {parseBeers as parse} from 'parseBeers'; parse;", "loading.mjs").build();
 
