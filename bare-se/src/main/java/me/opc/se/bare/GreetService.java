@@ -26,16 +26,7 @@ public class GreetService implements Service {
   private static final JsonBuilderFactory JSON = Json.createBuilderFactory(Collections.emptyMap());
 
 
-  public static final String JS_CODE = "(function parseBeers(data, name) {" +
-    "    var beers = JSON.parse(data);" +
-    "    var results = [];" +
-    "    for (var b of beers) {" +
-    "        if (b.name.indexOf(name) != -1) {" +
-    "            results.push({name: b.name, desc: b.description});" +
-    "        }" +
-    "    }" +
-    "    return JSON.stringify(results);" +
-    "})";
+  public static final String JS_CODE = "";
 
     private final String greeting;
 
@@ -62,7 +53,6 @@ public class GreetService implements Service {
   private void getDefaultMessageHandler(ServerRequest request, ServerResponse response) {
     try {
       var what = request.path().param("what");
-
 
       Context ctx = Context.newBuilder("js")
         .allowAllAccess(true)
