@@ -36,7 +36,7 @@ public class GreetService implements Service {
 
       parseBeers = ctx.eval(source);
     }
-    catch (Exception e) {throw new RuntimeException(e);} 
+    catch (Exception e) {throw new RuntimeException(e);}
   }
 
 
