@@ -14,7 +14,10 @@ import io.helidon.webserver.ServerRequest;
 import io.helidon.webserver.ServerResponse;
 import io.helidon.webserver.Service;
 import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.HostAccess;
 import org.graalvm.polyglot.Value;
+import org.graalvm.polyglot.proxy.Proxy;
+
 
 public class GreetService implements Service {
     private static final Logger LOGGER = Logger.getLogger(GreetService.class.getName());
@@ -44,9 +47,13 @@ public class GreetService implements Service {
         var what = request.path().param("what");
 
 
-        Context ctx = Context.create("js");
-        ctx.eval("js", "function add(a, b) { return a + b; }");
+        Context ctx = Context.newBuilder("js")
+          .allowAllAccess(true)
+          .build();
 
+        WebCL
+
+        ctx.eval("js", "function add(a, b) { return a + b; }");
 
         var eval = ctx.getBindings("js").getMember("add");
 
