@@ -23,10 +23,21 @@ import org.graalvm.polyglot.proxy.Proxy;
 
 
 public class GreetService implements Service {
-    private static final Logger LOGGER = Logger.getLogger(GreetService.class.getName());
+
+  private static Context ctx = Context.newBuilder("js")
+    .allowAllAccess(true).fileSystem(new MyFileSystem())
+    .build();
+
+  private static Source source = Source.newBuilder("js",
+    "import {parseBeers as parse} from 'parseBeers'; parse;", "loading.mjs").build();
+
+  private static Value parseBeers = ctx.eval(source);
+
+
+  private static final Logger LOGGER = Logger.getLogger(GreetService.class.getName());
   private static final JsonBuilderFactory JSON = Json.createBuilderFactory(Collections.emptyMap());
 
-    private final String greeting;
+  private final String greeting;
 
   GreetService(Config config) {
     greeting = config.get("app.greeting").asString().orElse("Ciao");
@@ -51,15 +62,6 @@ public class GreetService implements Service {
   private void getDefaultMessageHandler(ServerRequest request, ServerResponse response) {
     try {
       var what = request.path().param("what");
-
-      Context ctx = Context.newBuilder("js")
-        .allowAllAccess(true).fileSystem(new MyFileSystem())
-        .build();
-
-      var source = Source.newBuilder("js",
-      "import {parseBeers as parse} from 'parseBeers'; parse;", "loading.mjs").build();
-
-      var parseBeers = ctx.eval(source);
 
       var client = WebClient.builder().baseUri("https://api.punkapi.com/v2/beers").build();
       String result = client.get().request(String.class).toCompletableFuture().get();
