@@ -45,26 +45,31 @@ public class GreetService implements Service {
      * @param request the server request
      * @param response the server response
      */
-    private void getDefaultMessageHandler(ServerRequest request, ServerResponse response) throws ExecutionException, InterruptedException {
-        var what = request.path().param("what");
+    private void getDefaultMessageHandler(ServerRequest request, ServerResponse response) {
+        try {
+            var what = request.path().param("what");
 
 
-        Context ctx = Context.newBuilder("js")
-          .allowAllAccess(true)
-          .build();
+            Context ctx = Context.newBuilder("js")
+              .allowAllAccess(true)
+              .build();
 
-        var client = WebClient.builder().baseUri("https://api.punkapi.com/v2/beers").build();
-        String result = client.get().request(String.class).toCompletableFuture().get();
+            var client = WebClient.builder().baseUri("https://api.punkapi.com/v2/beers").build();
+            String result = client.get().request(String.class).toCompletableFuture().get();
 
-        ctx.eval("js", "function id(a) { return a; }");
+            ctx.eval("js", "function id(a) { return a; }");
 
-        var eval = ctx.getBindings("js").getMember("id");
+            var eval = ctx.getBindings("js").getMember("id");
 
-        String msg = String.format("%s %s!", greeting, eval.execute(result));
-        LOGGER.info("Greeting message is " + msg);
-        JsonObject returnObject = JSON.createObjectBuilder()
-                .add("message", msg)
-                .build();
-        response.send(returnObject);
+            String msg = String.format("%s %s!", greeting, eval.execute(result));
+            LOGGER.info("Greeting message is " + msg);
+            JsonObject returnObject = JSON.createObjectBuilder()
+              .add("message", msg)
+              .build();
+            response.send(returnObject);
+        }
+        catch (Exception ignoreMe ) {
+        }
+        }
     }
 }
