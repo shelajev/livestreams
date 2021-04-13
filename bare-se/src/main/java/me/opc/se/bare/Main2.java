@@ -7,8 +7,8 @@ public class Main2 {
     Context ctx = Context.create("js");
 
     var x = ctx.eval("js", "new Promise((resolve, reject) => {" +
-      "resolve(42);" +
-      "}).then(console.log)");
-    
+      "reject(42);" +
+      "}).then(console.log).catch(console.log)");
+
   }
 }
