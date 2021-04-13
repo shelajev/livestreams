@@ -22,54 +22,54 @@ import org.graalvm.polyglot.proxy.Proxy;
 
 
 public class GreetService implements Service {
-    private static final Logger LOGGER = Logger.getLogger(GreetService.class.getName());
-    private static final JsonBuilderFactory JSON = Json.createBuilderFactory(Collections.emptyMap());
+  private static final Logger LOGGER = Logger.getLogger(GreetService.class.getName());
+  private static final JsonBuilderFactory JSON = Json.createBuilderFactory(Collections.emptyMap());
 
-    private final String greeting;
+  private final String greeting;
 
-    GreetService(Config config) {
-        greeting = config.get("app.greeting").asString().orElse("Ciao");
+  GreetService(Config config) {
+    greeting = config.get("app.greeting").asString().orElse("Ciao");
+  }
+
+  /**
+   * A service registers itself by updating the routing rules.
+   *
+   * @param rules the routing rules.
+   */
+  @Override
+  public void update(Routing.Rules rules) {
+    rules.get("/{what}", this::getDefaultMessageHandler);
+  }
+
+  /**
+   * Return a worldly greeting message.
+   *
+   * @param request  the server request
+   * @param response the server response
+   */
+  private void getDefaultMessageHandler(ServerRequest request, ServerResponse response) {
+    try {
+      var what = request.path().param("what");
+
+
+      Context ctx = Context.newBuilder("js")
+        .allowAllAccess(true)
+        .build();
+
+      var client = WebClient.builder().baseUri("https://api.punkapi.com/v2/beers").build();
+      String result = client.get().request(String.class).toCompletableFuture().get();
+
+      ctx.eval("js", "function id(a) { return a; }");
+
+      var eval = ctx.getBindings("js").getMember("id");
+
+      String msg = String.format("%s %s!", greeting, eval.execute(result));
+      LOGGER.info("Greeting message is " + msg);
+      JsonObject returnObject = JSON.createObjectBuilder()
+        .add("message", msg)
+        .build();
+      response.send(returnObject);
+    } catch (Exception ignoreMe) {
     }
-
-    /**
-     * A service registers itself by updating the routing rules.
-     * @param rules the routing rules.
-     */
-    @Override
-    public void update(Routing.Rules rules) {
-        rules.get("/{what}", this::getDefaultMessageHandler);
-    }
-
-    /**
-     * Return a worldly greeting message.
-     * @param request the server request
-     * @param response the server response
-     */
-    private void getDefaultMessageHandler(ServerRequest request, ServerResponse response) {
-        try {
-            var what = request.path().param("what");
-
-
-            Context ctx = Context.newBuilder("js")
-              .allowAllAccess(true)
-              .build();
-
-            var client = WebClient.builder().baseUri("https://api.punkapi.com/v2/beers").build();
-            String result = client.get().request(String.class).toCompletableFuture().get();
-
-            ctx.eval("js", "function id(a) { return a; }");
-
-            var eval = ctx.getBindings("js").getMember("id");
-
-            String msg = String.format("%s %s!", greeting, eval.execute(result));
-            LOGGER.info("Greeting message is " + msg);
-            JsonObject returnObject = JSON.createObjectBuilder()
-              .add("message", msg)
-              .build();
-            response.send(returnObject);
-        }
-        catch (Exception ignoreMe ) {
-        }
-        }
-    }
+  }
 }
