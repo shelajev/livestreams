@@ -1,6 +1,7 @@
 package me.opc.se.bare;
 
 import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.Value;
 
 import java.util.function.Consumer;
 
@@ -12,7 +13,7 @@ public class Main2 {
       "resolve(42);" +
       "})");
 
-    x.invokeMember("then",
+    Value then = x.invokeMember("then",
       (Consumer<Object>) (inside -> System.out.println("Java +" + inside)));
 
   }
