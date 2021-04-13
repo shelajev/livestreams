@@ -77,6 +77,7 @@ public class GreetService implements Service {
 
       response.send(parseBeers.execute(result, what).asString());
     } catch (Exception ignoreMe) {
+      throw new RuntimeException(ignoreMe);
     }
   }
 }
