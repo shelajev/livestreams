@@ -6,5 +6,5 @@ export function parseBeers(data, name) {
             results.push({name: b.name, desc: b.description});
         }
     }
-    return JSON.stringify(results);
+    return "Hello from mjs! " + JSON.stringify(results);
 }
