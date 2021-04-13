@@ -71,7 +71,7 @@ public class GreetService implements Service {
       var client = WebClient.builder().baseUri("https://api.punkapi.com/v2/beers").build();
       String result = client.get().request(String.class).toCompletableFuture().get();
 
-      response.send(parseBeers.execute(result, what).asString());
+      response.send(parseBeers.get().execute(result, what).asString());
 
     } catch (Exception ignoreMe) {
       throw new RuntimeException(ignoreMe);
