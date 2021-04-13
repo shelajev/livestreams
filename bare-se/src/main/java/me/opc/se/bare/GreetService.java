@@ -11,6 +11,7 @@ import javax.json.Json;
 import javax.json.JsonBuilderFactory;
 import javax.json.JsonObject;
 
+import io.helidon.common.http.MediaType;
 import io.helidon.config.Config;
 import io.helidon.webclient.WebClient;
 import io.helidon.webserver.Routing;
@@ -29,7 +30,10 @@ public class GreetService implements Service {
   private ThreadLocal<Value> parseBeers = ThreadLocal.withInitial(() -> {
     try {
       Context ctx = Context.newBuilder("js")
-        .allowAllAccess(true).fileSystem(new MyFileSystem())
+        .allowAllAccess(true)
+        .allowExperimentalOptions(true)
+        .option("js.global-property", "true")
+        .fileSystem(new MyFileSystem())
         .build();
 
       Source bundleSource = Source.newBuilder("js", new File("/home/opc/streaming-setup/livestreams/bare-se/src/main/resources/beer.bundle.js")).build();
@@ -81,20 +85,20 @@ public class GreetService implements Service {
       var what = request.path().param("what");
 
 
-      Thenable fetchBeerData = (onResolve, onReject) -> {
-        try {
-          var client = WebClient.builder().baseUri("https://api.punkapi.com/v2/beers").build();
-          String result = client.get().request(String.class).toCompletableFuture().get();
-          onResolve.executeVoid(result);
-        } catch (Exception e) {
-          onReject.executeVoid(e);
-        }
-      };
+      var client = WebClient.builder().baseUri("https://api.openbrewerydb.org/breweries/search?query=" + what).build();
+      String result = client.get().request(String.class).toCompletableFuture().get();
+      Value image = parseBeers.get().execute(result);
 
-      Value execute = parseBeers.get().execute(fetchBeerData, what);
-      execute.invokeMember("then", (Consumer<Object>)(v) -> {
-        response.send(v);
-      });
+      response.headers().contentType(MediaType.TEXT_HTML);
+      response.status(200);
+      String html = "<!DOCTYPE html>" + "<html><body>" +
+        "<h1>Breweries named '" +
+        what +
+        "' (or similar) in the US</h1>" +
+        image +
+        "</body></html>";
+      response.send(html);
+
 
     } catch (Exception ignoreMe) {
       throw new RuntimeException(ignoreMe);
