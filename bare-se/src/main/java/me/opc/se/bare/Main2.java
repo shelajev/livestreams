@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 
 public class Main2 {
   public static void main(String[] args) {
-    Context ctx = Context.create("js");
+    Context ctx = Context.newBuilder("js").allowAllAccess(true).build();
 
     var x = ctx.eval("js", "(async function foo () { return 42; })");
 
